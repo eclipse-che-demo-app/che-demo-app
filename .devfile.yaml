@@ -123,29 +123,53 @@ components:
     size: 2Gi
   name: pgdata
 commands:
-  - id: init-workspace
-    exec:
-      component: tools
-      commandLine: 'bash...'
-      workingDir: ${PROJECT_SOURCE}
-  - id: dev-run
-    exec:
-      component: tools
-      commandLine: 'mvn -Dmaven.repo.local=/home/user/.m2/repository quarkus:dev -Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager'
-      hotReloadCapable: true
-      group:
-        kind: run
-        isDefault: true
-      workingDir: ${PROJECT_SOURCE}
-  - id: dev-debug
-    exec:
-      component: tools
-      commandLine: 'mvn -Dmaven.repo.local=/home/user/.m2/repository quarkus:dev -Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Ddebug=${DEBUG_PORT}'
-      hotReloadCapable: true
-      group:
-        kind: debug
-        isDefault: true
-      workingDir: ${PROJECT_SOURCE}
-events:
-  postStart:
-    - init-compile
+- exec:
+    commandLine: mvn package
+    component: dev-tools
+    group:
+      isDefault: true
+      kind: build
+    workingDir: '${PROJECT_SOURCE}'
+  id: package
+- exec:
+    commandLine: mvn package -Dnative -Dmaven.test.skip -Dquarkus.native.native-image-xmx=2G
+    component: dev-tools
+    group:
+      kind: build
+    label: Package Native
+    workingDir: '${PROJECT_SOURCE}'
+  id: package-native
+- exec:
+    commandLine: 'quarkus dev -Dmaven.repo.local=/home/user/.m2/repository -Dquarkus.http.host=0.0.0.0'
+    component: dev-tools
+    hotReloadCapable: true
+    group:
+      isDefault: true
+      kind: run
+    label: Start Quarkus Development mode (Hot reload + debug)
+    workingDir: '${PROJECT_SOURCE}'
+  id: quarkus-dev-mode
+- exec:
+    commandLine: "POD=$(oc get pod --selector controller.devfile.io/devworkspace_name=che-test-workspace -o name) ; oc rsh -c quarkus-native-runner ${POD}"
+    component: dev-tools
+    group:
+      kind: run
+    label: Terminal - Quarkus Native UBI
+    workingDir: '${PROJECT_SOURCE}'
+  id: ubi-shell
+- exec:
+    commandLine: "POD=$(oc get pod --selector controller.devfile.io/devworkspace_name=che-test-workspace -o name) ; oc rsh -c postgres ${POD}"
+    component: dev-tools
+    group:
+      kind: run
+    label: Terminal - PostgreSQL
+    workingDir: '${PROJECT_SOURCE}'
+  id: postgres-shell
+- exec:
+    commandLine: "kubedock server --port-forward"
+    component: dev-tools
+    group:
+      kind: run
+    label: Kubedock
+    workingDir: '${PROJECT_SOURCE}'
+  id: kubedock

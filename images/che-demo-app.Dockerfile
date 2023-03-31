@@ -19,6 +19,8 @@ RUN microdnf --disableplugin=subscription-manager install -y openssl compat-open
   mkdir -p ${USER_HOME_DIR} ; \
   mkdir -p ${WORK_DIR} ; \
   mkdir -p /usr/local/bin ; \
+  npm install -g @angular/cli ; \
+  ln -s /usr/local/tools/node/bin/ng /usr/local/tools/bin/ng ; \
   setcap cap_setuid+ep /usr/bin/newuidmap ; \
   setcap cap_setgid+ep /usr/bin/newgidmap ; \
   mkdir -p "${HOME}"/.config/containers ; \
@@ -28,9 +30,7 @@ RUN microdnf --disableplugin=subscription-manager install -y openssl compat-open
   echo user:20000:65536 > /etc/subuid  ; \
   echo user:20000:65536 > /etc/subgid ; \
   chgrp -R 0 /home ; \
-  chmod -R g=u /home ${WORK_DIR} ; \
-  npm install -g @angular/cli ; \
-  ln -s /usr/local/tools/node/bin/ng /usr/local/tools/bin/ng
+  chmod -R g=u /home ${WORK_DIR}
 USER 10001
 WORKDIR ${WORK_DIR}
 CMD [ "tail", "-f", "/dev/null" ]

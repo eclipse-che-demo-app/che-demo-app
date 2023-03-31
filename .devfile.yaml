@@ -85,7 +85,7 @@ components:
         path: /home/user/.npm
     endpoints:
       - name: node
-        targetPort: 4000
+        targetPort: 4200
     args:
       - '-f'
       - /dev/null

@@ -4,21 +4,21 @@ attributes:
 metadata:
   name: home-library
 projects:
-- name: project-main
+- name: che-demo-app
   git:
     checkoutFrom:
       remote: origin
       revision: main
     remotes:
       origin: https://github.com/cgruver/che-demo-app.git
-- name: ui
+- name: che-demo-app-ui
   git:
     checkoutFrom:
       remote: origin
       revision: main
     remotes:
       origin: https://github.com/cgruver/che-demo-app-ui.git
-- name: backend
+- name: che-demo-app-service
   git:
     checkoutFrom:
       remote: origin

@@ -47,6 +47,8 @@ components:
     volumeMounts:
     - name: m2
       path: /home/user/.m2
+    - name: npm
+      path: /home/user/.npm
 - name: quarkus-runner
   container: 
     image: quay.io/cgruver0/che/che-demo-app:latest
@@ -78,6 +80,9 @@ components:
     memoryLimit: 1Gi
     mountSources: true
     sourceMapping: /projects
+    volumeMounts:
+      - name: npm
+        path: /home/user/.npm
     endpoints:
       - name: node
         targetPort: 4000
@@ -119,6 +124,9 @@ components:
 - volume:
     size: 2Gi
   name: m2
+- volume:
+    size: 2Gi
+  name: npm
 - volume:
     size: 2Gi
   name: pgdata

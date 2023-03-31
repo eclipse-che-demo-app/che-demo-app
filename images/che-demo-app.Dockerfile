@@ -29,7 +29,8 @@ RUN microdnf --disableplugin=subscription-manager install -y openssl compat-open
   echo user:20000:65536 > /etc/subgid ; \
   chgrp -R 0 /home ; \
   chmod -R g=u /home ${WORK_DIR} ; \
-  npm install -g @angular/cli
+  npm install -g @angular/cli ; \
+  ln -s /usr/local/tools/node/bin/ng /usr/local/tools/bin/ng
 USER 10001
 WORKDIR ${WORK_DIR}
 CMD [ "tail", "-f", "/dev/null" ]

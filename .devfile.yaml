@@ -49,6 +49,10 @@ components:
       path: /home/user/.m2
     - name: npm
       path: /home/user/.npm
+    endpoints:
+      - name: kubedock
+        targetPort: 2475
+        exposure: none
 - name: quarkus-runner
   container: 
     image: quay.io/cgruver0/che/che-demo-app:latest
@@ -59,8 +63,10 @@ components:
       - name: m2
         path: /home/user/.m2
     endpoints:
-      - name: http-quarkus
+      - name: https-quarkus
         targetPort: 8080
+        exposure: public
+        protocol: https
       - exposure: none
         name: debug
         targetPort: 5858
@@ -86,6 +92,8 @@ components:
     endpoints:
       - name: node
         targetPort: 4200
+        exposure: public
+        protocol: https
     args:
       - '-f'
       - /dev/null

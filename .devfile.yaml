@@ -166,7 +166,7 @@ commands:
     workingDir: '/projects/che-demo-app-service'
   id: quarkus-dev-mode
 - exec:
-    commandLine: 'ng serve'
+    commandLine: 'ng serve --host 0.0.0.0'
     component: node-runner
     hotReloadCapable: true
     group:

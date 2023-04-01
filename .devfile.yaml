@@ -1,4 +1,4 @@
-schemaVersion: 2.1.0
+schemaVersion: 2.2.0
 attributes:
   controller.devfile.io/storage-type: per-workspace
 metadata:
@@ -137,7 +137,7 @@ commands:
     group:
       isDefault: true
       kind: build
-    workingDir: '${PROJECT_SOURCE}'
+    workingDir: '/projects/che-demo-app-service'
   id: package
 - exec:
     commandLine: mvn package -Dnative -Dmaven.test.skip -Dquarkus.native.native-image-xmx=2G
@@ -145,33 +145,51 @@ commands:
     group:
       kind: build
     label: Package Native
-    workingDir: '${PROJECT_SOURCE}'
+    workingDir: '/projects/che-demo-app-service'
   id: package-native
 - exec:
     commandLine: 'quarkus dev -Dmaven.repo.local=/home/user/.m2/repository -Dquarkus.http.host=0.0.0.0'
-    component: dev-tools
+    component: quarkus-runner
     hotReloadCapable: true
     group:
       isDefault: true
       kind: run
-    label: Start Quarkus Development mode (Hot reload + debug)
-    workingDir: '${PROJECT_SOURCE}'
+    label: Start Quarkus Development mode (Hot reload)
+    workingDir: '/projects/che-demo-app-service'
   id: quarkus-dev-mode
 - exec:
-    commandLine: "POD=$(oc get pod --selector controller.devfile.io/devworkspace_name=che-test-workspace -o name) ; oc rsh -c quarkus-native-runner ${POD}"
-    component: dev-tools
+    commandLine: 'ng serve'
+    component: node-runner
+    hotReloadCapable: true
+    group:
+      isDefault: true
+      kind: run
+    label: Start NodeJS Development mode (Hot reload)
+    workingDir: '/projects/che-demo-app-ui'
+  id: node-dev-mode
+- exec:
+    commandLine: "POD=$(oc get pod --selector controller.devfile.io/devworkspace_name=che-demo-app -o name) ; oc rsh -c node-runner ${POD}"
+    component: oc-cli
     group:
       kind: run
-    label: Terminal - Quarkus Native UBI
-    workingDir: '${PROJECT_SOURCE}'
+    label: Terminal - App UI
+    workingDir: '/'
+  id: demo-app-ui-shell
+- exec:
+    commandLine: "POD=$(oc get pod --selector controller.devfile.io/devworkspace_name=che-demo-app -o name) ; oc rsh -c quarkus-runner ${POD}"
+    component: oc-cli
+    group:
+      kind: run
+    label: Terminal - App Service
+    workingDir: '/'
   id: ubi-shell
 - exec:
-    commandLine: "POD=$(oc get pod --selector controller.devfile.io/devworkspace_name=che-test-workspace -o name) ; oc rsh -c postgres ${POD}"
-    component: dev-tools
+    commandLine: "POD=$(oc get pod --selector controller.devfile.io/devworkspace_name=che-demo-app -o name) ; oc rsh -c postgres ${POD}"
+    component: oc-cli
     group:
       kind: run
     label: Terminal - PostgreSQL
-    workingDir: '${PROJECT_SOURCE}'
+    workingDir: '/'
   id: postgres-shell
 - exec:
     commandLine: "kubedock server --port-forward"
@@ -179,5 +197,5 @@ commands:
     group:
       kind: run
     label: Kubedock
-    workingDir: '${PROJECT_SOURCE}'
+    workingDir: '/'
   id: kubedock

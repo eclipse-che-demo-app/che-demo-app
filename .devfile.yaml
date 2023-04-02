@@ -115,6 +115,10 @@ components:
     volumeMounts:
     - name: pgdata
       path: /var/lib/pgsql/data
+    endpoints:
+      - exposure: none
+        name: postgres
+        targetPort: 5432
 - name: oc-cli
   container:
     args:

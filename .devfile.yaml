@@ -67,8 +67,8 @@ components:
         targetPort: 8080
         exposure: public
         protocol: https
-      - exposure: none
-        name: debug
+      - name: debug
+        exposure: none
         targetPort: 5858
     env:
       - name: DEBUG_PORT
@@ -166,7 +166,7 @@ commands:
     workingDir: '/projects/che-demo-app-service'
   id: quarkus-dev-mode
 - exec:
-    commandLine: 'ng serve --host 0.0.0.0'
+    commandLine: 'ng serve --disable-host-check --host 0.0.0.0'
     component: node-runner
     hotReloadCapable: true
     group:

@@ -116,8 +116,7 @@ components:
     - name: pgdata
       path: /var/lib/pgsql/data
     endpoints:
-      - exposure: none
-        name: postgres
+      - name: postgres
         targetPort: 5432
 - name: oc-cli
   container:

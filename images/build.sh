@@ -77,12 +77,12 @@ function getTools() {
 }
 
 function buildToolsImage() {
-  podman build -t ${TOOLS_IMAGE_PATH}:${TOOLS_IMAGE_TAG} -f dev-tools.Dockerfile .
+  podman build -t ${TOOLS_IMAGE_PATH}:${TOOLS_IMAGE_TAG} -f dev-tools.Containerfile .
   podman push ${TOOLS_IMAGE_PATH}:${TOOLS_IMAGE_TAG}
 }
 
 function buildDevImage() {
-  podman build -t ${DEMO_IMAGE_PATH}:${DEMO_IMAGE_TAG} -f che-demo-app.Dockerfile .
+  podman build -t ${DEMO_IMAGE_PATH}:${DEMO_IMAGE_TAG} -f che-demo-app.Containerfile .
   podman push ${DEMO_IMAGE_PATH}:${DEMO_IMAGE_TAG}
 }
 

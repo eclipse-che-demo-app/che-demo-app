@@ -75,6 +75,16 @@ components:
         value: '5858'
       - name: JAVA_HOME 
         value: /etc/alternatives/jre_17
+      - name: API_PORT
+        value: '8080'
+      - name: DB_USER
+        value: postgres
+      - name: DB_PWD
+        value: postgres
+      - name: DB_HOST
+        value: localhost
+      - name: DB_SCHEMA
+        value: postgres
     args:
       - '-f'
       - /dev/null

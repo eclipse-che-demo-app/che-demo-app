@@ -260,7 +260,5 @@ commands:
       - set-ui-env
     parallel: false
   id: init-ui-env
-events:
-  postStart:
-    - init-ui-env
+
 

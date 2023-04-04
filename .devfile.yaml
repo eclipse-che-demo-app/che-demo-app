@@ -70,6 +70,9 @@ components:
       - name: debug
         exposure: none
         targetPort: 5858
+      - name: dt-socket
+        exposure: none
+        targetPort: 5005
     env:
       - name: DEBUG_PORT
         value: '5858'
@@ -85,6 +88,10 @@ components:
         value: localhost
       - name: DB_SCHEMA
         value: postgres
+      - name: CORS_ORIGINS
+        value: "/.*/"
+      - name: CORS_METHODS
+        value: "GET,POST,DELETE"
     args:
       - '-f'
       - /dev/null

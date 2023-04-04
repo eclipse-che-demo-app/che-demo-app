@@ -148,7 +148,7 @@ components:
     memoryLimit: 64M
     env:
     - name: KUBECONFIG
-      value: /projects/kubeconfig
+      value: /projects/config
 - volume:
     size: 4Gi
   name: projects
@@ -239,7 +239,7 @@ commands:
     workingDir: '/'
   id: kubedock
 - exec:
-    commandLine: "cp /home/user/.kube/config /projects/kubeconfig"
+    commandLine: "cp /home/user/.kube/config /projects/config"
     component: dev-tools
     group:
       kind: run
@@ -248,7 +248,7 @@ commands:
   id: cp-kubeconfig
 - exec:
     commandLine: "/projects/che-demo-app/setUiEnv.sh -f=/projects/che-demo-app-ui/src/environments/environment.development.ts -s=/projects/che-demo-app-ui/env.dev -c=quarkus-runner -w=che-demo-app -p=8080 -e=https-quarkus -v=backendApiUrl"
-    component: dev-tools
+    component: oc-cli
     group:
       kind: run
     label: Set Angular Environment

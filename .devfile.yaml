@@ -35,6 +35,11 @@ components:
     cpuLimit: 2000m
     mountSources: true
     sourceMapping: /projects
+    args:
+      - '-f'
+      - /dev/null
+    command:
+      - tail
     env:
     - name: SHELL
       value: "/bin/zsh"
@@ -245,7 +250,7 @@ commands:
       kind: run
     label: Copy Kubeconfig
     workingDir: '/'
-  id: cp-kubeconfig
+  id: copy-kubeconfig
 - exec:
     commandLine: "/projects/che-demo-app/setUiEnv.sh -f=/projects/che-demo-app-ui/src/environments/environment.development.ts -s=/projects/che-demo-app-ui/env.dev -c=quarkus-runner -w=che-demo-app -p=8080 -e=https-quarkus -v=backendApiUrl"
     component: oc-cli
@@ -254,6 +259,4 @@ commands:
     label: Set Angular Environment
     workingDir: '/'
   id: set-ui-env
-events:
-  postStart:
-    - cp-kubeconfig
+

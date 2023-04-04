@@ -146,6 +146,9 @@ components:
     sourceMapping: /projects
     mountSources: true
     memoryLimit: 64M
+    env:
+    - name: KUBECONFIG
+      value: /projects/kubeconfig
 - volume:
     size: 4Gi
   name: projects
@@ -235,14 +238,14 @@ commands:
     label: Kubedock
     workingDir: '/'
   id: kubedock
-# - exec:
-#     commandLine: "mkdir -p /projects/bin ; cp /usr/bin/oc /projects/bin/oc; cp /usr/bin/kubectl /projects/bin/kubectl"
-#     component: oc-cli
-#     group:
-#       kind: run
-#     label: Terminal - OC CLI
-#     workingDir: '/'
-#   id: oc-cli-shell
+- exec:
+    commandLine: "cp /home/user/.kube/config /projects/kubeconfig"
+    component: dev-tools
+    group:
+      kind: run
+    label: Copy Kubeconfig
+    workingDir: '/'
+  id: cp-kubeconfig
 - exec:
     commandLine: "/projects/che-demo-app/setUiEnv.sh -f=/projects/che-demo-app-ui/src/environments/environment.development.ts -s=/projects/che-demo-app-ui/env.dev -c=quarkus-runner -w=che-demo-app -p=8080 -e=https-quarkus -v=backendApiUrl"
     component: dev-tools
@@ -251,6 +254,13 @@ commands:
     label: Set Angular Environment
     workingDir: '/'
   id: set-ui-env
+- composite:
+    commands:
+      - cp-kubeconfig
+      - set-ui-env
+    parallel: false
+  id: init-ui-env
 events:
   postStart:
-    - set-ui-env
+    - init-ui-env
+

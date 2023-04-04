@@ -220,6 +220,14 @@ commands:
     workingDir: '/'
   id: postgres-shell
 - exec:
+    commandLine: "POD=$(oc get pod --selector controller.devfile.io/devworkspace_name=che-demo-app -o name) ; oc rsh -c oc-cli ${POD}"
+    component: oc-cli
+    group:
+      kind: run
+    label: Terminal - OC CLI
+    workingDir: '/'
+  id: oc-cli-shell
+- exec:
     commandLine: "kubedock server --port-forward"
     component: dev-tools
     group:
@@ -227,3 +235,14 @@ commands:
     label: Kubedock
     workingDir: '/'
   id: kubedock
+- exec:
+    commandLine: "/projects/che-demo-app/setUiEnv.sh -f=/projects/che-demo-app-ui/src/environments/environment.development.ts -s=/projects/che-demo-app-ui/env.dev -c=quarkus-runner -w=che-demo-app -p=8080 -e=https-quarkus -v=backendApiUrl"
+    component: oc-cli
+    group:
+      kind: run
+    label: Set Angular Environment
+    workingDir: '/'
+  id: set-ui-env
+events:
+  postStart:
+    - set-ui-env

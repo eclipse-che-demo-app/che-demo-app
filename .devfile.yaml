@@ -254,11 +254,6 @@ commands:
     label: Set Angular Environment
     workingDir: '/'
   id: set-ui-env
-- composite:
-    commands:
-      - cp-kubeconfig
-      - set-ui-env
-    parallel: false
-  id: init-ui-env
-
-
+events:
+  postStart:
+    - cp-kubeconfig

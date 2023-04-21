@@ -35,11 +35,6 @@ components:
     cpuLimit: 2000m
     mountSources: true
     sourceMapping: /projects
-    args:
-      - '-f'
-      - /dev/null
-    command:
-      - tail
     env:
     - name: SHELL
       value: "/bin/zsh"
@@ -97,11 +92,6 @@ components:
         value: "/.*/"
       - name: CORS_METHODS
         value: "GET,POST,DELETE"
-    args:
-      - '-f'
-      - /dev/null
-    command:
-      - tail
 - name: node-runner
   container: 
     image: quay.io/cgruver0/che/che-demo-app:latest
@@ -116,11 +106,6 @@ components:
         targetPort: 4200
         exposure: public
         protocol: https
-    args:
-      - '-f'
-      - /dev/null
-    command:
-      - tail
 - name: postgres
   container:
     image: quay.io/sclorg/postgresql-15-c9s:c9s

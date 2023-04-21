@@ -12,9 +12,6 @@ do
     -c=*)
       CONTAINER_NAME="${i#*=}"
     ;;
-    -w=*)
-      WORKSPACE_NAME="${i#*=}"
-    ;;
     -p=*)
       TARGET_PORT="${i#*=}"
     ;;
@@ -32,6 +29,5 @@ then
   cp ${SOURCE_FILE_PATH} ${ENV_FILE_PATH}
 fi
 
-WORKSPACE_ID=$(oc get devworkspace ${WORKSPACE_NAME} -o jsonpath={.status.devworkspaceId})
-API_ROUTE=https://$(oc get route ${WORKSPACE_ID}-${CONTAINER_NAME}-${TARGET_PORT}-${ENDPOINT_NAME} -o jsonpath={.spec.host})
+API_ROUTE=https://$(oc get route ${DEVWORKSPACE_ID}-${CONTAINER_NAME}-${TARGET_PORT}-${ENDPOINT_NAME} -o jsonpath={.spec.host})
 sed -i "s|${ENV_VAR}:.*|${ENV_VAR}: \'${API_ROUTE}\'|g" ${ENV_FILE_PATH}

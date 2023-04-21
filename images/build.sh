@@ -60,10 +60,14 @@ function getTools() {
 
   ## NodeJS
   TEMP_DIR="$(mktemp -d)"
-  curl -fsSL -o ${TEMP_DIR}/node.tgz https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}-linux-x64.tar.xz
-  tar -xzf ${TEMP_DIR}/node.tgz -C ${TEMP_DIR}
+  curl -fsSL -o ${TEMP_DIR}/node.tz https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}-linux-x64.tar.xz
+  tar -x --no-auto-compress -f ${TEMP_DIR}/node.tz -C ${TEMP_DIR}
   mv ${TEMP_DIR}/node-${NODE_VERSION}-linux-x64 ${TOOLS_DIR}/node
   rm -rf "${TEMP_DIR}"
+
+  ## Local Scripts
+  cp ./gitSecret.sh ${TOOLS_DIR}/bin
+  chmod +x ${TOOLS_DIR}/bin/gitSecret.sh
 
   ## Create Symbolic Links to executables
   cd ${TOOLS_DIR}/bin
@@ -73,6 +77,8 @@ function getTools() {
   ln -s ../node/bin/npm npm
   ln -s ../node/bin/corepack corepack
   ln -s ../node/bin/npx npx
+  ln -s /projects/bin/oc oc
+  ln -s /projects/bin/kubectl kubectl
   cd -
 }
 

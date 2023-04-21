@@ -92,6 +92,11 @@ components:
         value: "/.*/"
       - name: CORS_METHODS
         value: "GET,POST,DELETE"
+    args:
+      - '-f'
+      - /dev/null
+    command:
+      - tail
 - name: node-runner
   container: 
     image: quay.io/cgruver0/che/che-demo-app:latest
@@ -106,6 +111,11 @@ components:
         targetPort: 4200
         exposure: public
         protocol: https
+    args:
+      - '-f'
+      - /dev/null
+    command:
+      - tail
 - name: postgres
   container:
     image: quay.io/sclorg/postgresql-15-c9s:c9s
@@ -128,17 +138,15 @@ components:
 - name: oc-cli
   container:
     args:
-      - '-f'
-      - /dev/null
+      - '-c'
+      - >-
+        mkdir -p /projects/bin && cp /usr/bin/oc /projects/bin/oc && cp /usr/bin/kubectl /projects/bin/kubectl
     command:
-      - tail
+      - /bin/bash
     image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
     sourceMapping: /projects
     mountSources: true
     memoryLimit: 64M
-    env:
-    - name: KUBECONFIG
-      value: /projects/config
 - volume:
     size: 4Gi
   name: projects
@@ -179,7 +187,7 @@ commands:
     workingDir: '/projects/che-demo-app-service'
   id: quarkus-dev-mode
 - exec:
-    commandLine: 'ng serve --disable-host-check --host 0.0.0.0'
+    commandLine: '/projects/che-demo-app/setUiEnv.sh -f=/projects/che-demo-app-ui/src/environments/environment.development.ts -s=/projects/che-demo-app-ui/env.dev -c=quarkus-runner -w=che-demo-app -p=8080 -e=https-quarkus -v=backendApiUrl && ng serve --disable-host-check --host 0.0.0.0'
     component: node-runner
     hotReloadCapable: true
     group:
@@ -189,38 +197,6 @@ commands:
     workingDir: '/projects/che-demo-app-ui'
   id: node-dev-mode
 - exec:
-    commandLine: "POD=$(oc get pod --selector controller.devfile.io/devworkspace_name=che-demo-app -o name) ; oc rsh -c node-runner ${POD}"
-    component: oc-cli
-    group:
-      kind: run
-    label: Terminal - App UI
-    workingDir: '/'
-  id: demo-app-ui-shell
-- exec:
-    commandLine: "POD=$(oc get pod --selector controller.devfile.io/devworkspace_name=che-demo-app -o name) ; oc rsh -c quarkus-runner ${POD}"
-    component: oc-cli
-    group:
-      kind: run
-    label: Terminal - App Service
-    workingDir: '/'
-  id: ubi-shell
-- exec:
-    commandLine: "POD=$(oc get pod --selector controller.devfile.io/devworkspace_name=che-demo-app -o name) ; oc rsh -c postgres ${POD}"
-    component: oc-cli
-    group:
-      kind: run
-    label: Terminal - PostgreSQL
-    workingDir: '/'
-  id: postgres-shell
-- exec:
-    commandLine: "POD=$(oc get pod --selector controller.devfile.io/devworkspace_name=che-demo-app -o name) ; oc rsh -c oc-cli ${POD}"
-    component: oc-cli
-    group:
-      kind: run
-    label: Terminal - OC CLI
-    workingDir: '/'
-  id: oc-cli-shell
-- exec:
     commandLine: "kubedock server --port-forward"
     component: dev-tools
     group:
@@ -228,20 +204,10 @@ commands:
     label: Kubedock
     workingDir: '/'
   id: kubedock
-- exec:
-    commandLine: "cp /home/user/.kube/config /projects/config"
-    component: dev-tools
-    group:
-      kind: run
-    label: Copy Kubeconfig
-    workingDir: '/'
-  id: copy-kubeconfig
-- exec:
-    commandLine: "/projects/che-demo-app/setUiEnv.sh -f=/projects/che-demo-app-ui/src/environments/environment.development.ts -s=/projects/che-demo-app-ui/env.dev -c=quarkus-runner -w=che-demo-app -p=8080 -e=https-quarkus -v=backendApiUrl"
+- apply:
     component: oc-cli
-    group:
-      kind: run
-    label: Set Angular Environment
-    workingDir: '/'
-  id: set-ui-env
-
+    label: Copy OpenShift CLI
+  id: cp-oc-cli
+events:
+  preStart:
+    - cp-oc-cli

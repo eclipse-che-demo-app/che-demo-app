@@ -15,6 +15,7 @@
 			"redhat.vscode-yaml",
 			"redhat.java",
 			"redhat.vscode-quarkus",
+			"redhat.vscode-openshift-connector",
 			"mhutchie.git-graph",
 			"eamodio.gitlens",
 			"streetsidesoftware.code-spell-checker",

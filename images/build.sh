@@ -65,6 +65,15 @@ function getTools() {
   mv ${TEMP_DIR}/node-${NODE_VERSION}-linux-x64 ${TOOLS_DIR}/node
   rm -rf "${TEMP_DIR}"
 
+  ## Helm
+  TEMP_DIR="$(mktemp -d)"
+  HELM_VERSION=$(basename $(curl -Ls -o /dev/null -w %{url_effective} https://github.com/helm/helm/releases/latest))
+  curl -fsSL -o ${TEMP_DIR}/helm.tgz https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz
+  tar -xzf ${TEMP_DIR}/helm.tgz -C ${TEMP_DIR}
+  mv ${TEMP_DIR}/linux-amd64/helm ${TOOLS_DIR}/bin/helm
+  chmod +x ${TOOLS_DIR}/bin/helm
+  rm -rf "${TEMP_DIR}"
+
   ## Local Scripts
   cp ./gitSecret.sh ${TOOLS_DIR}/bin
   chmod +x ${TOOLS_DIR}/bin/gitSecret.sh

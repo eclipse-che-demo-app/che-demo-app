@@ -13,7 +13,7 @@ ENV GRAALVM_HOME=/usr/local/tools/graalvm
 ENV JAVA_HOME=/etc/alternatives/jre_17_openjdk
 ENV PATH=${PATH}:/usr/local/tools/bin
 COPY --from=quay.io/cgruver0/che/dev-tools:latest /tools/ /usr/local/tools
-RUN microdnf --disableplugin=subscription-manager install -y openssl compat-openssl11 libbrotli git tar gzip zip unzip which shadow-utils bash zsh vi wget jq podman buildah skopeo glibc-devel zlib-devel gcc libffi-devel libstdc++-devel gcc-c++ glibc-langpack-en ca-certificates helm ${JAVA_PACKAGE}; \
+RUN microdnf --disableplugin=subscription-manager install -y openssl compat-openssl11 libbrotli git tar gzip zip unzip which shadow-utils bash zsh vi wget jq podman buildah skopeo glibc-devel zlib-devel gcc libffi-devel libstdc++-devel gcc-c++ glibc-langpack-en ca-certificates ${JAVA_PACKAGE}; \
   microdnf update -y ; \
   microdnf clean all ; \
   mkdir -p ${USER_HOME_DIR} ; \

@@ -97,7 +97,7 @@ function buildToolsImage() {
 }
 
 function buildDevImage() {
-  podman build -t ${DEMO_IMAGE_PATH}:${DEMO_IMAGE_TAG} -f che-demo-app.Containerfile .
+  podman build -t ${DEMO_IMAGE_PATH}:${DEMO_IMAGE_TAG} --build-arg TOOLS_IMAGE_TAG=${TOOLS_IMAGE_TAG} -f che-demo-app.Containerfile .
   podman push ${DEMO_IMAGE_PATH}:${DEMO_IMAGE_TAG}
 }
 

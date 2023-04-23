@@ -4,6 +4,7 @@ ARG WORK_DIR="/projects"
 ARG JAVA_PACKAGE=java-17-openjdk-devel
 ARG USER_HOME_DIR="/home/user"
 ARG WORK_DIR="/projects"
+ARG TOOLS_IMAGE_TAG="latest"
 ENV HOME=${USER_HOME_DIR}
 ENV BUILDAH_ISOLATION=chroot
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'

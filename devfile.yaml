@@ -135,6 +135,7 @@ components:
     endpoints:
       - name: postgres
         targetPort: 5432
+        exposure: internal
 - name: oc-cli
   container:
     args:

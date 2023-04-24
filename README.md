@@ -6,12 +6,16 @@ This code repository contains the configuration for an OpenShift Dev Spaces (Ecl
 
 There are three main workspace components in this repo:
 
-1. The `devfile` which defines the Eclipse Che / OpenShift Dev Spaces Workspace:
+1. The Devfile - `./devfile`
+
+   Defines the Eclipse Che / OpenShift Dev Spaces Workspace:
 
    Explained here: [Eclipse Che Devfile](./Devfile.md)
 
-1. The `code-workspace` which defines the VSCode workspace:
+1. The VSCode workspace - `./che-demo.code-workspace`
 
    Explained here: [VSCode Workspace](CodeWorkspace.md)
 
-1. 
+1. The developer tooling image - `./images`
+
+   Explained here: [Developer Tooling Image](Tooling.md)

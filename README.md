@@ -19,3 +19,5 @@ There are three main workspace components in this repo:
 1. The developer tooling image - `./images`
 
    Explained here: [Developer Tooling Image](Tooling.md)
+
+The structure of this Github organization is an opinionated illustration of how an enterprise application team might choose to structure their project.

@@ -5,7 +5,6 @@ QUARKUS_VERSION=${QUARKUS_VERSION:=2.16.1.Final}
 NODE_VERSION=${NODE_VERSION:=v18.15.0}
 MANDREL_VERSION=${MANDREL_VERSION:=22.3.0.1-Final}
 KUBEDOCK_VERSION=${KUBEDOCK_VERSION:=0.9.2}
-DOCKER_VERSION=${DOCKER_VERSION:=20.10.8}
 TOOLS_IMAGE_PATH=${TOOLS_IMAGE_PATH:=quay.io/cgruver0/che/dev-tools}
 TOOLS_IMAGE_TAG=${TOOLS_IMAGE_TAG:=latest}
 DEMO_IMAGE_PATH=${DEMO_IMAGE_PATH:=quay.io/cgruver0/che/che-demo-app}
@@ -74,9 +73,16 @@ function getTools() {
   chmod +x ${TOOLS_DIR}/bin/helm
   rm -rf "${TEMP_DIR}"
 
-  ## Local Scripts
-  cp ./gitSecret.sh ${TOOLS_DIR}/bin
-  chmod +x ${TOOLS_DIR}/bin/gitSecret.sh
+  ## Github CLI
+  TEMP_DIR="$(mktemp -d)"
+  GH_VERSION=$(basename $(curl -LsI -o /dev/null -w %{url_effective} https://github.com/cli/cli/releases/latest) | cut -d'v' -f2)
+  GH_ARCH="linux_amd64"
+  GH_TGZ_URL="https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_${GH_ARCH}.tar.gz"
+  curl -fsSL -o ${TEMP_DIR}/gh.tgz "${GH_TGZ_URL}"
+  tar -zxf ${TEMP_DIR}/gh.tgz -C ${TEMP_DIR}
+  mv ${TEMP_DIR}/gh_${GH_VERSION}_${GH_ARCH}/bin/gh ${TOOLS_DIR}/bin/
+  chmod +x ${TOOLS_DIR}/bin/gh
+  rm -rf "${TEMP_DIR}"
 
   ## Create Symbolic Links to executables
   cd ${TOOLS_DIR}/bin

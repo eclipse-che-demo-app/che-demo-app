@@ -32,7 +32,6 @@ components:
     memoryRequest: 1Gi
     memoryLimit: 6Gi
     cpuRequest: 500m
-    cpuLimit: 2000m
     mountSources: true
     sourceMapping: /projects
     env:

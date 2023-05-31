@@ -147,7 +147,7 @@ components:
     image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
     sourceMapping: /projects
     mountSources: true
-    memoryLimit: 64M
+    memoryLimit: 256M
 - volume:
     size: 4Gi
   name: projects

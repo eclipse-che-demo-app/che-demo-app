@@ -44,6 +44,8 @@ components:
       value: "true"
     - name: DOCKER_HOST
       value: "tcp://127.0.0.1:2475"
+    - name: VSCODE_DEFAULT_WORKSPACE
+      value: "/projects/che-demo-app/che-demo.code-workspace"
     volumeMounts:
     - name: m2
       path: /home/user/.m2

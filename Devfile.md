@@ -1,1 +1,228 @@
 # Docs WIP
+
+The `devfile.yaml` defines our workspace.  It allows a team to create a standardized workspace which is sharable across the whole team.  It ensures consistency across the team for things that are important, without sacrificing individual autonomy for developers.
+
+The Devfile in this example project includes the following elements:
+
+* `projects:`  Defines the git repositories to be cloned on workspace creation.
+* `components:`  Defines the working elements of the workspace.  In this example, `containers` and `volumes`.
+* `commands:`
+* `events:`
+
+```yaml
+schemaVersion: 2.2.0
+attributes:
+  controller.devfile.io/storage-type: per-workspace
+metadata:
+  name: che-demo-app
+projects:
+- name: che-demo-app
+  git:
+    checkoutFrom:
+      remote: origin
+      revision: main
+    remotes:
+      origin: https://github.com/eclipse-che-demo-app/che-demo-app.git
+- name: che-demo-app-ui
+  git:
+    checkoutFrom:
+      remote: origin
+      revision: main
+    remotes:
+      origin: https://github.com/eclipse-che-demo-app/che-demo-app-ui.git
+- name: che-demo-app-service
+  git:
+    checkoutFrom:
+      remote: origin
+      revision: main
+    remotes:
+      origin: https://github.com/eclipse-che-demo-app/che-demo-app-service.git
+components:
+- name: dev-tools
+  container: 
+    image: quay.io/cgruver0/che/che-demo-app:latest
+    memoryRequest: 1Gi
+    memoryLimit: 6Gi
+    cpuRequest: 500m
+    cpuLimit: 2000m
+    mountSources: true
+    sourceMapping: /projects
+    env:
+    - name: SHELL
+      value: "/bin/zsh"
+    - name: TESTCONTAINERS_RYUK_DISABLED
+      value: "true"
+    - name: TESTCONTAINERS_CHECKS_DISABLE
+      value: "true"
+    - name: DOCKER_HOST
+      value: "tcp://127.0.0.1:2475"
+    volumeMounts:
+    - name: m2
+      path: /home/user/.m2
+    - name: npm
+      path: /home/user/.npm
+    endpoints:
+      - name: kubedock
+        targetPort: 2475
+        exposure: none
+- name: quarkus-runner
+  container: 
+    image: quay.io/cgruver0/che/che-demo-app:latest
+    memoryLimit: 1Gi
+    mountSources: true
+    sourceMapping: /projects
+    volumeMounts:
+      - name: m2
+        path: /home/user/.m2
+    endpoints:
+      - name: https-quarkus
+        targetPort: 8080
+        exposure: public
+        protocol: https
+      - name: debug
+        exposure: none
+        targetPort: 5858
+      - name: dt-socket
+        exposure: none
+        targetPort: 5005
+    env:
+      - name: DEBUG_PORT
+        value: '5858'
+      - name: JAVA_HOME 
+        value: /etc/alternatives/jre_17
+      - name: API_PORT
+        value: '8080'
+      - name: DB_USER
+        value: postgres
+      - name: DB_PWD
+        value: postgres
+      - name: DB_HOST
+        value: localhost
+      - name: DB_SCHEMA
+        value: postgres
+      - name: CORS_ORIGINS
+        value: "/.*/"
+      - name: CORS_METHODS
+        value: "GET,POST,DELETE"
+    args:
+      - '-f'
+      - /dev/null
+    command:
+      - tail
+- name: node-runner
+  container: 
+    image: quay.io/cgruver0/che/che-demo-app:latest
+    memoryLimit: 1Gi
+    mountSources: true
+    sourceMapping: /projects
+    volumeMounts:
+      - name: npm
+        path: /home/user/.npm
+    endpoints:
+      - name: node
+        targetPort: 4200
+        exposure: public
+        protocol: https
+    args:
+      - '-f'
+      - /dev/null
+    command:
+      - tail
+- name: postgres
+  container:
+    image: quay.io/sclorg/postgresql-15-c9s:c9s
+    memoryLimit: 512M
+    sourceMapping: /projects
+    mountSources: true
+    env:
+    - name: POSTGRESQL_USER
+      value: postgres
+    - name: POSTGRESQL_PASSWORD
+      value: postgres
+    - name: POSTGRESQL_DATABASE
+      value: postgres
+    volumeMounts:
+    - name: pgdata
+      path: /var/lib/pgsql/data
+    endpoints:
+      - name: postgres
+        targetPort: 5432
+        exposure: internal
+- name: oc-cli
+  container:
+    args:
+      - '-c'
+      - >-
+        mkdir -p /projects/bin && cp /usr/bin/oc /projects/bin/oc && cp /usr/bin/kubectl /projects/bin/kubectl
+    command:
+      - /bin/bash
+    image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+    sourceMapping: /projects
+    mountSources: true
+    memoryLimit: 64M
+- volume:
+    size: 4Gi
+  name: projects
+- volume:
+    size: 2Gi
+  name: m2
+- volume:
+    size: 2Gi
+  name: npm
+- volume:
+    size: 2Gi
+  name: pgdata
+commands:
+- exec:
+    commandLine: mvn package
+    component: dev-tools
+    group:
+      isDefault: true
+      kind: build
+    workingDir: '/projects/che-demo-app-service'
+  id: package
+- exec:
+    commandLine: mvn package -Dnative -Dmaven.test.skip -Dquarkus.native.native-image-xmx=2G
+    component: dev-tools
+    group:
+      kind: build
+    label: Package Native
+    workingDir: '/projects/che-demo-app-service'
+  id: package-native
+- exec:
+    commandLine: 'quarkus dev -Dmaven.repo.local=/home/user/.m2/repository -Dquarkus.http.host=0.0.0.0'
+    component: quarkus-runner
+    hotReloadCapable: true
+    group:
+      isDefault: true
+      kind: run
+    label: Start Quarkus Development mode (Hot reload)
+    workingDir: '/projects/che-demo-app-service'
+  id: quarkus-dev-mode
+- exec:
+    commandLine: '/projects/che-demo-app/setUiEnv.sh -f=/projects/che-demo-app-ui/src/environments/environment.development.ts -s=/projects/che-demo-app-ui/env.dev -c=quarkus-runner -p=8080 -e=https-quarkus -v=backendApiUrl && npm install && ng serve --disable-host-check --host 0.0.0.0'
+    component: node-runner
+    hotReloadCapable: true
+    group:
+      isDefault: true
+      kind: run
+    label: Start NodeJS Development mode (Hot reload)
+    workingDir: '/projects/che-demo-app-ui'
+  id: node-dev-mode
+- exec:
+    commandLine: "kubedock server --port-forward"
+    component: dev-tools
+    group:
+      kind: run
+    label: Kubedock
+    workingDir: '/'
+  id: kubedock
+- apply:
+    component: oc-cli
+    label: Copy OpenShift CLI
+  id: cp-oc-cli
+events:
+  preStart:
+    - cp-oc-cli
+
+```

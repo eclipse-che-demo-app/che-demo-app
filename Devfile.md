@@ -4,10 +4,12 @@ The `devfile.yaml` defines our workspace.  It allows a team to create a standard
 
 The Devfile in this example project includes the following elements:
 
-* `projects:`  Defines the git repositories to be cloned on workspace creation.
-* `components:`  Defines the working elements of the workspace.  In this example, `containers` and `volumes`.
-* `commands:`
-* `events:`
+* `projects:`  The git repositories to be cloned on workspace creation.
+* `components:`  The working elements of the workspace.  In this example, `containers` and `volumes`.
+  * `containers`  The container images and their configuration that provide the tooling for the workspace.
+  * `volumes`  The persistent areas of the workspace that will be allocated to a `PersistentVolumeClaim`
+* `commands:`  Predefined execution paths for the workspace which are executed either as init-containers on startup, life-cycle events on the workspace, or via the IDE.
+* `events:`  Lifecycle events which can be defined on the workspace.
 
 ```yaml
 schemaVersion: 2.2.0
@@ -56,6 +58,8 @@ components:
       value: "true"
     - name: DOCKER_HOST
       value: "tcp://127.0.0.1:2475"
+    - name: VSCODE_DEFAULT_WORKSPACE
+      value: "/projects/che-demo-app/che-demo.code-workspace"
     volumeMounts:
     - name: m2
       path: /home/user/.m2
@@ -159,7 +163,7 @@ components:
     image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
     sourceMapping: /projects
     mountSources: true
-    memoryLimit: 64M
+    memoryLimit: 256M
 - volume:
     size: 4Gi
   name: projects
@@ -224,5 +228,4 @@ commands:
 events:
   preStart:
     - cp-oc-cli
-
 ```

@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-MAVEN_VERSION=${MAVEN_VERSION:=3.8.8}
+MAVEN_VERSION=${MAVEN_VERSION:=3.9.2}
 QUARKUS_VERSION=${QUARKUS_VERSION:=2.16.1.Final}
-NODE_VERSION=${NODE_VERSION:=v18.15.0}
+NODE_VERSION=${NODE_VERSION:=v18.16.1}
 MANDREL_VERSION=${MANDREL_VERSION:=22.3.0.1-Final}
-KUBEDOCK_VERSION=${KUBEDOCK_VERSION:=0.9.2}
+KUBEDOCK_VERSION=${KUBEDOCK_VERSION:=0.11.0}
 TOOLS_IMAGE_PATH=${TOOLS_IMAGE_PATH:=quay.io/cgruver0/che/dev-tools}
 TOOLS_IMAGE_TAG=${TOOLS_IMAGE_TAG:=latest}
 DEMO_IMAGE_PATH=${DEMO_IMAGE_PATH:=quay.io/cgruver0/che/che-demo-app}
@@ -117,6 +117,11 @@ do
       buildToolsImage
     ;;
     -d)
+      buildDevImage
+    ;;
+    -a)
+      getTools
+      buildToolsImage
       buildDevImage
     ;;
     *)

@@ -58,6 +58,7 @@ components:
 - name: quarkus-runner
   container: 
     image: quay.io/cgruver0/che/che-demo-app:latest
+    memoryRequest: 128M
     memoryLimit: 1Gi
     mountSources: true
     sourceMapping: /projects
@@ -102,6 +103,7 @@ components:
 - name: node-runner
   container: 
     image: quay.io/cgruver0/che/che-demo-app:latest
+    memoryRequest: 128M
     memoryLimit: 1Gi
     mountSources: true
     sourceMapping: /projects
@@ -121,6 +123,7 @@ components:
 - name: postgres
   container:
     image: quay.io/sclorg/postgresql-15-c9s:c9s
+    memoryRequest: 128M
     memoryLimit: 512M
     sourceMapping: /projects
     mountSources: true
@@ -149,6 +152,7 @@ components:
     image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
     sourceMapping: /projects
     mountSources: true
+    memoryRequest: 128M
     memoryLimit: 256M
 - volume:
     size: 4Gi

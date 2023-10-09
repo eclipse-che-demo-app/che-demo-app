@@ -42,8 +42,6 @@ components:
       value: "true"
     - name: TESTCONTAINERS_CHECKS_DISABLE
       value: "true"
-    - name: DOCKER_HOST
-      value: "tcp://127.0.0.1:2475"
     - name: VSCODE_DEFAULT_WORKSPACE
       value: "/projects/che-demo-app/che-demo.code-workspace"
     volumeMounts:
@@ -203,14 +201,6 @@ commands:
     label: Start NodeJS Development mode (Hot reload)
     workingDir: '/projects/che-demo-app-ui'
   id: node-dev-mode
-- exec:
-    commandLine: "kubedock server --port-forward"
-    component: dev-tools
-    group:
-      kind: run
-    label: Kubedock
-    workingDir: '/'
-  id: kubedock
 - apply:
     component: oc-cli
     label: Copy OpenShift CLI

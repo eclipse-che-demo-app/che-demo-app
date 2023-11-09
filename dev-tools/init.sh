@@ -4,5 +4,5 @@ oc apply -f ./tools-build.yaml
 
 oc import-image postgresql-15-c9s:c9s --from=quay.io/sclorg/postgresql-15-c9s:c9s --confirm -n dev-tools
 
-oc start-build dev-tools-image -n dev-tools -w -F    
+oc start-build dev-tools -n dev-tools -w -F    
 

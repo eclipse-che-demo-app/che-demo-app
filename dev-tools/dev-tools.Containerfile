@@ -18,7 +18,7 @@ ENV GRAALVM_HOME=/usr/local/tools/graalvm
 ENV JAVA_HOME=/etc/alternatives/jre_17_openjdk
 ENV PATH=${PATH}:/usr/local/tools/bin:/usr/local/tools/node/bin
 ENV JBANG_DIR=/usr/local/tools/jbang
-COPY --from=builder /tools/ /usr/local/tools
+COPY --from=tools-builder /tools/ /usr/local/tools
 COPY --chown=0:0 entrypoint.sh /
 RUN microdnf --disableplugin=subscription-manager install -y procps-ng openssl compat-openssl11 libbrotli git tar gzip zip xz unzip which shadow-utils bash zsh vi wget jq podman buildah skopeo podman-docker glibc-devel zlib-devel gcc libffi-devel libstdc++-devel gcc-c++ glibc-langpack-en ca-certificates python3-pip python3-devel ${JAVA_PACKAGE}; \
   microdnf update -y ; \

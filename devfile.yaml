@@ -28,7 +28,8 @@ projects:
 components:
 - name: dev-tools
   container: 
-    image: image-registry.openshift-image-registry.svc:5000/dev-tools/dev-tools:latest
+    # image: image-registry.openshift-image-registry.svc:5000/dev-tools/dev-tools:latest
+    image: quay.io/cgruver0/che/che-demo-app:latest
     memoryRequest: 1Gi
     memoryLimit: 6Gi
     cpuRequest: 500m
@@ -80,7 +81,8 @@ components:
       targetPort: 5005
 - name: postgres
   container:
-    image: image-registry.openshift-image-registry.svc:5000/dev-tools/postgresql-15-c9s:c9s
+    # image: image-registry.openshift-image-registry.svc:5000/dev-tools/postgresql-15-c9s:c9s
+    image: quay.io/sclorg/postgresql-15-c9s:c9s
     memoryRequest: 128M
     memoryLimit: 512M
     sourceMapping: /projects

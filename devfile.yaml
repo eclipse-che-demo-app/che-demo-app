@@ -31,7 +31,7 @@ components:
     # image: image-registry.openshift-image-registry.svc:5000/dev-tools/dev-tools:latest
     image: quay.io/cgruver0/che/che-demo-app:latest
     memoryRequest: 1Gi
-    memoryLimit: 6Gi
+    memoryLimit: 8Gi
     cpuRequest: 500m
     cpuLimit: 2000m
     mountSources: true

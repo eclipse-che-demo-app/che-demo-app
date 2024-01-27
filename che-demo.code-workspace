@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "../che-demo-app-service"
+		},
+		{
+			"path": "../test"
 		}
 	],
 	"extensions": {
@@ -29,6 +32,9 @@
 		"workbench.colorTheme": "Winter is Coming (Light)",
 		"workbench.preferredDarkColorTheme": "Winter is Coming (Dark Blue)",
 		"workbench.preferredLightColorTheme": "Winter is Coming (Light)",
-		"java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m -Xlog:disable"
+		"java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m -Xlog:disable",
+		"playwright.env": {
+			"PW_TEST_CONNECT_WS_ENDPOINT": "ws://127.0.0.1:3000/"
+		}
 	}
 }

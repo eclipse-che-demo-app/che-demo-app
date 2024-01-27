@@ -114,6 +114,28 @@ components:
     mountSources: true
     memoryRequest: 128M
     memoryLimit: 256M
+- name: playwright
+  container:
+    image: mcr.microsoft.com/playwright:v1.37.0-jammy
+    sourceMapping: /projects
+    # args:
+    #   - '-c'
+    #   - >-
+    #     cd /home/pwuser && npx -y playwright@1.37.0 run-server --port 3000
+    # command:
+    #   - /bin/sh
+    args:
+      - "-f"
+      - "/dev/null"
+    command:
+      - "tail"
+    mountSources: true
+    memoryRequest: 128M
+    memoryLimit: 256M
+    endpoints:
+      - name: playwright
+        targetPort: 3000
+        exposure: internal
 - volume:
     size: 4Gi
   name: projects

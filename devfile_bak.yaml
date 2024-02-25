@@ -1,0 +1,182 @@
+schemaVersion: 2.2.0
+attributes:
+  controller.devfile.io/storage-type: per-workspace
+metadata:
+  name: che-demo-app
+projects:
+- name: che-demo-app
+  git:
+    checkoutFrom:
+      remote: origin
+      revision: main
+    remotes:
+      origin: https://github.com/eclipse-che-demo-app/che-demo-app.git
+- name: che-demo-app-ui
+  git:
+    checkoutFrom:
+      remote: origin
+      revision: main
+    remotes:
+      origin: https://github.com/eclipse-che-demo-app/che-demo-app-ui.git
+- name: che-demo-app-service
+  git:
+    checkoutFrom:
+      remote: origin
+      revision: main
+    remotes:
+      origin: https://github.com/eclipse-che-demo-app/che-demo-app-service.git
+components:
+- name: dev-tools
+  container: 
+    # image: image-registry.openshift-image-registry.svc:5000/dev-tools/dev-tools:latest
+    image: quay.io/cgruver0/che/che-demo-app:latest
+    memoryRequest: 1Gi
+    memoryLimit: 8Gi
+    cpuRequest: 500m
+    cpuLimit: 2000m
+    mountSources: true
+    sourceMapping: /projects
+    env:
+    - name: SHELL
+      value: "/bin/zsh"
+    - name: VSCODE_DEFAULT_WORKSPACE
+      value: "/projects/che-demo-app/che-demo.code-workspace"
+    - name: DEBUG_PORT
+      value: '5858'
+    - name: JAVA_HOME 
+      value: /etc/alternatives/jre_17
+    - name: API_PORT
+      value: '8080'
+    - name: DB_USER
+      value: postgres
+    - name: DB_PWD
+      value: postgres
+    - name: DB_HOST
+      value: localhost
+    - name: DB_SCHEMA
+      value: postgres
+    - name: CORS_ORIGINS
+      value: "/.*/"
+    - name: CORS_METHODS
+      value: "GET,POST,DELETE"
+    volumeMounts:
+    - name: m2
+      path: /home/user/.m2
+    - name: npm
+      path: /home/user/.npm
+    endpoints:
+    - name: node
+      targetPort: 4200
+      exposure: public
+      protocol: https
+    - name: https-quarkus
+      targetPort: 8080
+      exposure: public
+      protocol: https
+    - name: debug
+      exposure: internal
+      targetPort: 5858
+    - name: dt-socket
+      exposure: internal
+      targetPort: 5005
+- name: postgres
+  container:
+    # image: image-registry.openshift-image-registry.svc:5000/dev-tools/postgresql-15-c9s:c9s
+    image: quay.io/sclorg/postgresql-15-c9s:c9s
+    memoryRequest: 128M
+    memoryLimit: 512M
+    sourceMapping: /projects
+    mountSources: true
+    env:
+    - name: POSTGRESQL_USER
+      value: postgres
+    - name: POSTGRESQL_PASSWORD
+      value: postgres
+    - name: POSTGRESQL_DATABASE
+      value: postgres
+    volumeMounts:
+    - name: pgdata
+      path: /var/lib/pgsql/data
+    endpoints:
+      - name: postgres
+        targetPort: 5432
+        exposure: internal
+- name: oc-cli
+  container:
+    args:
+      - '-c'
+      - >-
+        mkdir -p /projects/bin && cp /usr/bin/oc /projects/bin/oc && cp /usr/bin/kubectl /projects/bin/kubectl
+    command:
+      - /bin/bash
+    image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+    sourceMapping: /projects
+    mountSources: true
+    memoryRequest: 128M
+    memoryLimit: 256M
+- volume:
+    size: 4Gi
+  name: projects
+- volume:
+    size: 2Gi
+  name: m2
+- volume:
+    size: 2Gi
+  name: npm
+- volume:
+    size: 2Gi
+  name: pgdata
+commands:
+- exec:
+    commandLine: mvn package
+    component: dev-tools
+    group:
+      isDefault: true
+      kind: build
+    workingDir: '/projects/che-demo-app-service'
+  id: package
+- exec:
+    commandLine: mvn package -Dnative -Dmaven.test.skip -Dquarkus.native.native-image-xmx=2G
+    component: dev-tools
+    group:
+      kind: build
+    label: Package Native
+    workingDir: '/projects/che-demo-app-service'
+  id: package-native
+- exec:
+    commandLine: 'quarkus dev -Dmaven.repo.local=/home/user/.m2/repository -Dquarkus.http.host=0.0.0.0'
+    component: dev-tools
+    hotReloadCapable: true
+    group:
+      isDefault: true
+      kind: run
+    label: Start Quarkus Development mode (Hot reload)
+    workingDir: '/projects/che-demo-app-service'
+  id: quarkus-dev-mode
+- exec:
+    commandLine: '/projects/che-demo-app/setUiEnv.sh -f=/projects/che-demo-app-ui/src/environments/environment.development.ts -s=/projects/che-demo-app-ui/env.dev -c=dev-tools -p=8080 -e=https-quarkus -v=backendApiUrl && npm install && ng serve --disable-host-check --host 0.0.0.0'
+    component: dev-tools
+    hotReloadCapable: true
+    group:
+      isDefault: true
+      kind: run
+    label: Start NodeJS Development Local Service (Hot reload)
+    workingDir: '/projects/che-demo-app-ui'
+  id: node-dev-mode
+- exec:
+    commandLine: '/projects/che-demo-app/setUiEnvShared.sh -f=/projects/che-demo-app-ui/src/environments/environment.development.ts -s=/projects/che-demo-app-ui/env.dev -v=backendApiUrl && npm install && ng serve --disable-host-check --host 0.0.0.0'
+    component: dev-tools
+    hotReloadCapable: true
+    group:
+      isDefault: true
+      kind: run
+    label: Start NodeJS Development in Buddy Mode (Hot reload)
+    workingDir: '/projects/che-demo-app-ui'
+  id: node-dev-mode-remote
+- apply:
+    component: oc-cli
+    label: Copy OpenShift CLI
+  id: cp-oc-cli
+events:
+  preStart:
+    - cp-oc-cli

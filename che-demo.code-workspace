@@ -21,14 +21,15 @@
 			"johnpapa.winteriscoming",
 			"cnshenj.vscode-task-manager",
 			"angular.ng-template",
-			"johnpapa.angular2",
-			"SonatypeCommunity.vscode-iq-plugin"
+			"johnpapa.angular2"
 		]
 	},
 	"settings": {
 		"workbench.colorTheme": "Winter is Coming (Light)",
 		"workbench.preferredDarkColorTheme": "Winter is Coming (Dark Blue)",
 		"workbench.preferredLightColorTheme": "Winter is Coming (Light)",
-		"java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m -Xlog:disable"
+		"java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m -Xlog:disable",
+		"java.server.launchMode": "Hybrid",
+		"editor.wordWrap": "on"
 	}
 }

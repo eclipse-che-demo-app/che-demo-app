@@ -1,13 +1,16 @@
 {
 	"folders": [
 		{
-			"path": "."
+			"name": "che-demo-app",
+			"path": "/projects/che-demo-app"
 		},
 		{
-			"path": "../che-demo-app-ui"
+			"name": "che-demo-app-ui",
+			"path": "/projects/che-demo-app-ui"
 		},
 		{
-			"path": "../che-demo-app-service"
+			"name": "che-demo-app-service",
+			"path": "/projects/che-demo-app-service"
 		}
 	],
 	"extensions": {

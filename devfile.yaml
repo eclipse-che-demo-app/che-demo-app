@@ -27,6 +27,8 @@ projects:
       origin: https://github.com/eclipse-che-demo-app/che-demo-app-service.git
 components:
 - name: dev-tools
+  attributes:
+    controller.devfile.io/merge-contribution: true
   container: 
     # image: image-registry.openshift-image-registry.svc:5000/dev-tools/dev-tools:latest
     image: quay.io/cgruver0/che/che-demo-app:latest

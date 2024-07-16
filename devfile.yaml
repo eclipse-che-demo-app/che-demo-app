@@ -26,6 +26,41 @@ projects:
     remotes:
       origin: https://github.com/eclipse-che-demo-app/che-demo-app-service.git
 components:
+- name: postgres
+  container:
+    # image: image-registry.openshift-image-registry.svc:5000/dev-tools/postgresql-15-c9s:c9s
+    image: quay.io/sclorg/postgresql-15-c9s:c9s
+    memoryRequest: 128M
+    memoryLimit: 512M
+    sourceMapping: /projects
+    mountSources: true
+    env:
+    - name: POSTGRESQL_USER
+      value: postgres
+    - name: POSTGRESQL_PASSWORD
+      value: postgres
+    - name: POSTGRESQL_DATABASE
+      value: postgres
+    volumeMounts:
+    - name: pgdata
+      path: /var/lib/pgsql/data
+    endpoints:
+      - name: postgres
+        targetPort: 5432
+        exposure: internal
+- name: oc-cli
+  container:
+    args:
+      - '-c'
+      - >-
+        mkdir -p /projects/bin && cp /usr/bin/oc /projects/bin/oc && cp /usr/bin/kubectl /projects/bin/kubectl
+    command:
+      - /bin/bash
+    image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+    sourceMapping: /projects
+    mountSources: true
+    memoryRequest: 128M
+    memoryLimit: 256M
 - name: dev-tools
   attributes:
     controller.devfile.io/merge-contribution: true
@@ -81,41 +116,6 @@ components:
     - name: dt-socket
       exposure: internal
       targetPort: 5005
-- name: postgres
-  container:
-    # image: image-registry.openshift-image-registry.svc:5000/dev-tools/postgresql-15-c9s:c9s
-    image: quay.io/sclorg/postgresql-15-c9s:c9s
-    memoryRequest: 128M
-    memoryLimit: 512M
-    sourceMapping: /projects
-    mountSources: true
-    env:
-    - name: POSTGRESQL_USER
-      value: postgres
-    - name: POSTGRESQL_PASSWORD
-      value: postgres
-    - name: POSTGRESQL_DATABASE
-      value: postgres
-    volumeMounts:
-    - name: pgdata
-      path: /var/lib/pgsql/data
-    endpoints:
-      - name: postgres
-        targetPort: 5432
-        exposure: internal
-- name: oc-cli
-  container:
-    args:
-      - '-c'
-      - >-
-        mkdir -p /projects/bin && cp /usr/bin/oc /projects/bin/oc && cp /usr/bin/kubectl /projects/bin/kubectl
-    command:
-      - /bin/bash
-    image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
-    sourceMapping: /projects
-    mountSources: true
-    memoryRequest: 128M
-    memoryLimit: 256M
 - volume:
     size: 4Gi
   name: projects

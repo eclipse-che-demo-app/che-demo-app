@@ -18,6 +18,7 @@
 			"redhat.vscode-yaml",
 			"redhat.java",
 			"redhat.vscode-quarkus",
+			"redhat.fabric8-analytics",
 			"mhutchie.git-graph",
 			"eamodio.gitlens",
 			"streetsidesoftware.code-spell-checker",

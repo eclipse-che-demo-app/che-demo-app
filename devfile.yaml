@@ -28,8 +28,8 @@ projects:
 components:
 - name: dev-tools
   container: 
-    # image: image-registry.openshift-image-registry.svc:5000/dev-tools/dev-tools:latest
-    image: quay.io/cgruver0/che/che-demo-app:latest
+    image: image-registry.openshift-image-registry.svc:5000/dev-tools/dev-tools:latest
+    # image: quay.io/cgruver0/che/che-demo-app:latest
     memoryRequest: 1Gi
     memoryLimit: 8Gi
     cpuRequest: 50m
@@ -81,8 +81,8 @@ components:
       targetPort: 5005
 - name: postgres
   container:
-    # image: image-registry.openshift-image-registry.svc:5000/dev-tools/postgresql-15-c9s:c9s
-    image: quay.io/sclorg/postgresql-15-c9s:c9s
+    image: image-registry.openshift-image-registry.svc:5000/dev-tools/postgresql-15-c9s:c9s
+    # image: quay.io/sclorg/postgresql-15-c9s:c9s
     cpuRequest: 10m
     cpuLimit: 500m
     memoryRequest: 128M
@@ -103,19 +103,24 @@ components:
       - name: postgres
         targetPort: 5432
         exposure: internal
-- name: oc-cli
+- name: prep-workspace
   container:
     args:
       - '-c'
       - >-
-        mkdir -p /projects/bin && cp /usr/bin/oc /projects/bin/oc && cp /usr/bin/kubectl /projects/bin/kubectl
+        mkdir -p /projects/bin && cp /usr/bin/oc /projects/bin/oc && cp /usr/bin/kubectl /projects/bin/kubectl && if [[ -f ${HOME}/.kube/config ]]; then rm ${HOME}/.kube/config; fi
     command:
       - /bin/bash
     image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
-    sourceMapping: /projects
     mountSources: true
-    memoryRequest: 128M
-    memoryLimit: 256M
+    sourceMapping: /projects
+    memoryRequest: 128Mi
+    memoryLimit: 256Mi
+    cpuRequest: 10m
+    cpuLimit: 200m
+    env:
+    - name: HOME
+      value: "/projects/home"
 - volume:
     size: 4Gi
   name: projects
@@ -176,9 +181,9 @@ commands:
     workingDir: '/projects/che-demo-app-ui'
   id: node-dev-mode-remote
 - apply:
-    component: oc-cli
+    component: prep-workspace
     label: Copy OpenShift CLI
-  id: cp-oc-cli
+  id: prep-workspace
 events:
   preStart:
-    - cp-oc-cli
+    - prep-workspace

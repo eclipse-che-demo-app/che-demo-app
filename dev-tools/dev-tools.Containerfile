@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/ubi-minimal as tools-builder
+FROM image-registry.openshift-image-registry.svc:5000/dev-tools/ubi9-minimal:9.5 as tools-builder
 
 COPY fetch-tools.sh /fetch-tools.sh
 
@@ -6,7 +6,7 @@ RUN microdnf --disableplugin=subscription-manager install -y bash tar gzip zip x
   chmod +x /fetch-tools.sh ; \
   /fetch-tools.sh
 
-FROM registry.access.redhat.com/ubi9/ubi-minimal
+FROM image-registry.openshift-image-registry.svc:5000/dev-tools/ubi9-minimal:9.5
 
 ARG USER_HOME_DIR="/home/user"
 ARG WORK_DIR="/projects"

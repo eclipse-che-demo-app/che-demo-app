@@ -28,7 +28,6 @@ RUN microdnf --disableplugin=subscription-manager install -y procps-ng openssl c
   mkdir -p /usr/local/bin ; \
   setcap cap_setuid+ep /usr/bin/newuidmap ; \
   setcap cap_setgid+ep /usr/bin/newgidmap ; \
-  mkdir -p ${HOME}/.config/containers ; \
   touch /etc/subgid /etc/subuid ; \
   chmod -R g=u /etc/passwd /etc/group /etc/subuid /etc/subgid ; \
   npm install -g @angular/cli ; \
@@ -38,8 +37,11 @@ RUN microdnf --disableplugin=subscription-manager install -y procps-ng openssl c
   ln -s ${JBANG_DIR}/bin/jbang /usr/local/tools/bin/jbang ; \
   chgrp -R 0 /home ; \
   chmod +x /entrypoint.sh ; \
-  chmod -R g=u /home ${WORK_DIR}
+  chmod -R g=u /home ${WORK_DIR} ; \
+  # Create Sym Links for OpenShift CLI (Assumed to be retrieved by an init-container)
+  ln -s /projects/bin/oc /usr/local/bin/oc ; \
+  ln -s /projects/bin/kubectl /usr/local/bin/kubectl
 USER 10001
 WORKDIR ${WORK_DIR}
-ENTRYPOINT [ "/entrypoint.sh" ]
+ENTRYPOINT ["/usr/libexec/podman/catatonit","--","/entrypoint.sh"]
 CMD [ "tail", "-f", "/dev/null" ]

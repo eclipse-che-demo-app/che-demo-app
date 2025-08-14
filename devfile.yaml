@@ -39,7 +39,7 @@ components:
         procMount: Unmasked
   container: 
     # image: image-registry.openshift-image-registry.svc:5000/dev-tools/dev-tools:latest
-    image: quay.io/cgruver0/che/che-demo-app:latest
+    image: quay.io/cgruver0/che/che-demo-app:test
     memoryRequest: 1Gi
     memoryLimit: 8Gi
     cpuRequest: 50m
@@ -49,6 +49,8 @@ components:
     env:
     - name: SHELL
       value: "/bin/zsh"
+    - name: HOME
+      value: "/projects/home"
     - name: VSCODE_DEFAULT_WORKSPACE
       value: "/projects/che-demo-app/che-demo.code-workspace"
     - name: DEBUG_PORT

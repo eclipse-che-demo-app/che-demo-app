@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
 set -x
+set -e
 
-MAVEN_VERSION=${MAVEN_VERSION:=3.9.4}
+MAVEN_VERSION=${MAVEN_VERSION:=3.9.11}
 QUARKUS_VERSION=${QUARKUS_VERSION:=3.3.3}
 NODE_VERSION=${NODE_VERSION:=v18.20.8}
 MANDREL_VERSION=${MANDREL_VERSION:=23.0.1.2-Final}
@@ -17,7 +18,7 @@ mkdir -p ${TOOLS_DIR}/bin
 ## Install Apache Maven
 TEMP_DIR="$(mktemp -d)" 
 mkdir -p ${TOOLS_DIR}/maven ${TOOLS_DIR}/maven/ref 
-curl -fsSL -o ${TEMP_DIR}/apache-maven.tar.gz https://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz 
+curl -fsSL -o ${TEMP_DIR}/apache-maven.tar.gz https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz 
 tar -xzf ${TEMP_DIR}/apache-maven.tar.gz -C ${TOOLS_DIR}/maven --strip-components=1  
 rm -rf "${TEMP_DIR}"
 

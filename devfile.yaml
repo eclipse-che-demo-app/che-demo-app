@@ -27,16 +27,6 @@ projects:
       origin: https://github.com/eclipse-che-demo-app/che-demo-app-service.git
 components:
 - name: dev-tools
-  attributes:
-    pod-overrides:
-      metadata:
-        annotations:
-          io.kubernetes.cri-o.Devices: "/dev/fuse,/dev/net/tun"
-      spec:
-        hostUsers: false
-    container-overrides: 
-      securityContext:
-        procMount: Unmasked
   container: 
     # image: image-registry.openshift-image-registry.svc:5000/dev-tools/dev-tools:latest
     image: quay.io/cgruver0/che/che-demo-app:test

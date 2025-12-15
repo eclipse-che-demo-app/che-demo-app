@@ -25,7 +25,8 @@
 			"johnpapa.winteriscoming",
 			"cnshenj.vscode-task-manager",
 			"angular.ng-template",
-			"johnpapa.angular2"
+			"johnpapa.angular2",
+			"rooveterinaryinc.roo-cline"
 		]
 	},
 	"settings": {

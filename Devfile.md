@@ -194,7 +194,7 @@ commands:
     workingDir: '/projects/che-demo-app-service'
   id: package-native
 - exec:
-    commandLine: 'quarkus dev -Dmaven.repo.local=/home/user/.m2/repository -Dquarkus.http.host=0.0.0.0'
+    commandLine: 'quarkus dev -Dmaven.repo.local=${HOME}/.m2/repository -Dquarkus.http.host=0.0.0.0'
     component: quarkus-runner
     hotReloadCapable: true
     group:

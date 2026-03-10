@@ -16,9 +16,11 @@
 	"extensions": {
 		"recommendations": [
 			"redhat.vscode-yaml",
+			"redhat.vscode-xml",
 			"redhat.java",
 			"redhat.vscode-quarkus",
 			"redhat.fabric8-analytics",
+			"redhat.vscode-openshift-connector",
 			"mhutchie.git-graph",
 			"eamodio.gitlens",
 			"streetsidesoftware.code-spell-checker",
@@ -36,6 +38,7 @@
 		"java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m -Xlog:disable",
 		"java.server.launchMode": "Standard",
 		"editor.wordWrap": "on",
-		"files.autoSave": "off"
+		"files.autoSave": "off",
+		"java.configuration.updateBuildConfiguration": "automatic"
 	}
 }

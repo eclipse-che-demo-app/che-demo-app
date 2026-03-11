@@ -28,7 +28,7 @@ projects:
 components:
 - name: dev-tools
   container: 
-    image: quay.io/cgruver0/che/che-demo-app:test
+    image: quay.io/cgruver0/che/che-demo-app:latest
     memoryRequest: 1Gi
     memoryLimit: 8Gi
     cpuRequest: 50m

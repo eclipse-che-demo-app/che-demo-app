@@ -39,6 +39,7 @@
 		"java.server.launchMode": "Standard",
 		"editor.wordWrap": "on",
 		"files.autoSave": "off",
-		"java.configuration.updateBuildConfiguration": "automatic"
+		"java.configuration.updateBuildConfiguration": "automatic",
+		"java.compile.nullAnalysis.mode": "automatic"
 	}
 }

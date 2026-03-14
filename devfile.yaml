@@ -3,14 +3,7 @@ attributes:
   controller.devfile.io/storage-type: per-workspace
 metadata:
   name: che-demo-app
-projects:
-- name: che-demo-app
-  git:
-    checkoutFrom:
-      remote: origin
-      revision: main
-    remotes:
-      origin: https://github.com/eclipse-che-demo-app/che-demo-app.git
+dependentProjects:
 - name: che-demo-app-ui
   git:
     checkoutFrom:

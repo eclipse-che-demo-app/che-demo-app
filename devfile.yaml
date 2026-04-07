@@ -21,7 +21,8 @@ dependentProjects:
 components:
 - name: dev-tools
   container: 
-    image: quay.io/cgruver0/che/che-demo-app:latest
+    # image: quay.io/cgruver0/che/che-demo-app:latest
+    image: nexus.clg.lab:5002/dev-spaces/che-demo-app:latest
     memoryRequest: 1Gi
     memoryLimit: 8Gi
     cpuRequest: 50m

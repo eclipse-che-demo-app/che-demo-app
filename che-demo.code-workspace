@@ -27,7 +27,9 @@
 			"cnshenj.vscode-task-manager",
 			"angular.ng-template",
 			"johnpapa.angular2",
-			"rooveterinaryinc.roo-cline"
+			"rooveterinaryinc.roo-cline",
+			"onlyutkarsh.mermaid-diagram-lens",
+			"kilocode.kilo-code"
 		]
 	},
 	"settings": {

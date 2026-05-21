@@ -27,9 +27,9 @@
 			"cnshenj.vscode-task-manager",
 			"angular.ng-template",
 			"johnpapa.angular2",
-			"rooveterinaryinc.roo-cline",
 			"onlyutkarsh.mermaid-diagram-lens",
-			"kilocode.kilo-code"
+			"kilocode.kilo-code",
+			"redhat.devspaces-copilot-chat-integration"
 		]
 	},
 	"settings": {

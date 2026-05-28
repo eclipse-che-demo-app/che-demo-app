@@ -64,6 +64,9 @@ components:
     - name: dt-socket
       exposure: internal
       targetPort: 5005
+    - name: kilo-code
+      exposure: internal
+      targetPort: 4096
 - name: postgres
   container:
     image: image-registry.openshift-image-registry.svc:5000/imported-images/postgresql-15-c9s:c9s
@@ -92,7 +95,7 @@ components:
     args:
       - '-c'
       - >-
-        mkdir -p /projects/.bin && cp /usr/bin/oc /projects/.bin/oc && cp /usr/bin/kubectl /projects/.bin/kubectl && if [[ -f ${HOME}/.kube/config ]]; then rm ${HOME}/.kube/config; fi
+        mkdir -p /projects/.bin && cp /usr/bin/oc /projects/.bin/oc && cp /usr/bin/kubectl /projects/.bin/kubectl && if [[ -f ${HOME}/.kube/config ]]; then rm ${HOME}/.kube/config; fi; if [[ -f /projects/.globalconfig/kilo.jsonc ]]; then mkdir -p /projects/.config/kilo ; ln -sf /projects/.globalconfig/kilo.jsonc /projects/.config/kilo/kilo.jsonc; fi
     command:
       - /bin/bash
     image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest

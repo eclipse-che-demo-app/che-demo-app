@@ -28,8 +28,8 @@
 			"angular.ng-template",
 			"johnpapa.angular2",
 			"onlyutkarsh.mermaid-diagram-lens",
-			"kilocode.kilo-code",
-			"redhat.devspaces-copilot-chat-integration"
+			"zoocodeorganization.zoo-code",
+			"sst-dev.opencode"
 		]
 	},
 	"settings": {

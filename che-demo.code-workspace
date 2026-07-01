@@ -29,7 +29,8 @@
 			"johnpapa.angular2",
 			"onlyutkarsh.mermaid-diagram-lens",
 			"zoocodeorganization.zoo-code",
-			"sst-dev.opencode"
+			"sst-dev.opencode",
+			"kilocode.kilo-code"
 		]
 	},
 	"settings": {

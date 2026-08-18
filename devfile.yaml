@@ -95,7 +95,7 @@ components:
     args:
       - '-c'
       - >-
-        mkdir -p /projects/.bin && cp /usr/bin/oc /projects/.bin/oc && cp /usr/bin/kubectl /projects/.bin/kubectl
+        mkdir -p /${HOME}/.bin && cp /usr/bin/oc /${HOME}/.bin/oc && cp /usr/bin/kubectl /${HOME}/.bin/kubectl && mkdir -p /${HOME}/.kube
     command:
       - /bin/bash
     image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest

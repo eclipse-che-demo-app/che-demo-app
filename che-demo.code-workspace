@@ -42,6 +42,7 @@
 		"editor.wordWrap": "on",
 		"files.autoSave": "off",
 		"java.configuration.updateBuildConfiguration": "automatic",
-		"java.compile.nullAnalysis.mode": "automatic"
+		"java.compile.nullAnalysis.mode": "automatic",
+		"chat.disableAIFeatures": true
 	}
 }
